@@ -1,7 +1,15 @@
-import os
 from pathlib import Path
 
-from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
@@ -67,6 +75,7 @@ def running():
         products_with_urls=products_with_urls,
     )
 
+
 @views.route("/basket", methods=["GET"])
 @login_required
 def basket_page():
@@ -77,11 +86,9 @@ def basket_page():
         total += float(item.product.price) * int(item.quantity)
 
     return render_template(
-        "basket.html",
-        user=current_user,
-        basket_items=basket_items,
-        total=total
+        "basket.html", user=current_user, basket_items=basket_items, total=total
     )
+
 
 @views.route("/basket", methods=["POST"])
 @login_required
@@ -109,19 +116,14 @@ def basket_add():
         return jsonify({"error": "Product not found"}), 404
 
     basket_item = BasketItem.query.filter_by(
-        user_id=current_user.id,
-        product_id=product_id,
-        size=size
+        user_id=current_user.id, product_id=product_id, size=size
     ).first()
 
     if basket_item:
         basket_item.quantity += quantity
     else:
         basket_item = BasketItem(
-            user_id=current_user.id,
-            product_id=product_id,
-            quantity=quantity,
-            size=size
+            user_id=current_user.id, product_id=product_id, quantity=quantity, size=size
         )
         db.session.add(basket_item)
 
@@ -141,7 +143,10 @@ def product_management():
             return _handle_add_product()
 
     products = Product.query.all()
-    return render_template("product_management.html", user=current_user, products=products)
+    return render_template(
+        "product_management.html", user=current_user, products=products
+    )
+
 
 def _handle_remove_product():
     product_id = request.form.get("product_id_to_remove")
@@ -164,6 +169,7 @@ def _handle_remove_product():
 
     flash("Product deleted!", category="success")
     return redirect(url_for("views.product_management"))
+
 
 def _handle_add_product():
     product_name = (request.form.get("product_name") or "").strip()

@@ -10,11 +10,11 @@ db = SQLAlchemy()
 def create_app() -> Flask:
     app = Flask(__name__, instance_relative_config=True)
 
-    # Config (use environment variables in real deployments)
+    # Config
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-change-me")
     app.config["ADMIN_SIGNUP_KEY"] = os.environ.get("ADMIN_SIGNUP_KEY", "")
 
-    # Store SQLite DB in /instance (recommended Flask pattern)
+    # Store SQLite DB in /instance
     os.makedirs(app.instance_path, exist_ok=True)
     db_path = os.path.join(app.instance_path, "database.db")
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"

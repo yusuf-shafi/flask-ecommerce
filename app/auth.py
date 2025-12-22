@@ -1,6 +1,14 @@
 import os
 
-from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -12,7 +20,9 @@ auth = Blueprint("auth", __name__)
 
 def _is_admin_signup(admin_key_input: str | None) -> bool:
     """Return True if the provided admin key matches the configured key."""
-    expected = current_app.config.get("ADMIN_SIGNUP_KEY") or os.environ.get("ADMIN_SIGNUP_KEY", "")
+    expected = current_app.config.get("ADMIN_SIGNUP_KEY") or os.environ.get(
+        "ADMIN_SIGNUP_KEY", ""
+    )
     if not expected:
         return False
     return (admin_key_input or "") == expected
