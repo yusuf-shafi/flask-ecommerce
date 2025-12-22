@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Basket{% endblock %}
+
+{% block content %}
+<section class="portfolio" style="margin-top: 66px; padding-top: 66px;">
+  <div class="container">
+    <h1 class="mb-4">Your basket</h1>
+
+    {% if basket_items %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Size</th>
+            <th>Qty</th>
+            <th>Line total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in basket_items %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.product.product_name }}</td>
+            <td>£{{ "%.2f"|format(item.product.price) }}</td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+              £{{ "%.2f"|format(item.product.price * item.quantity) }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td colspan="5" class="text-end fw-bold">Total</td>
+            <td class="fw-bold">£{{ "%.2f"|format(total) }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-muted">Your basket is empty.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

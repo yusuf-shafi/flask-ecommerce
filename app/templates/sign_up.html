@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<section class="portfolio" style="margin-top: 66px; padding-top: 66px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <h1 class="h3 mb-2">Create an account</h1>
+        <p class="text-muted mb-4">Fill in your details to register.</p>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <form method="POST">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="firstName" class="form-label">First name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="password1" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password1"
+                  name="password1"
+                  placeholder="At least 6 characters"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="password2" class="form-label">Confirm password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password2"
+                  name="password2"
+                  placeholder="Re-enter password"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="adminKey" class="form-label">Admin key (optional)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="adminKey"
+                  name="adminKey"
+                  placeholder="Only if you were given one"
+                />
+              </div>
+
+              <button type="submit" class="btn btn-success w-100">
+                Create account
+              </button>
+            </form>
+
+            <div class="text-center mt-3">
+              <span class="text-muted">Already have an account?</span>
+              <a href="{{ url_for('auth.sign_in') }}" class="ms-1">Sign in</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

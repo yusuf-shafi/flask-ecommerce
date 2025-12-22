@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sports & Outdoors e-commerce demo built with Flask">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abhaya+Libre&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Agdasima&display=swap">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/font-awesome.min.css') }}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bs-theme-overrides.css') }}">
+
+    <title>{% block title %}Flask - ecommerce{% endblock %}</title>
+</head>
+
+<script>
+async function addToBasket(productId) {
+  const sizeEl = document.getElementById(`size-${productId}`);
+  const qtyEl = document.getElementById(`qty-${productId}`);
+
+  const size = sizeEl ? sizeEl.value : "";
+  const quantity = qtyEl ? parseInt(qtyEl.value || "1", 10) : 1;
+
+  const res = await fetch("/basket", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ product_id: productId, size, quantity })
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    alert(data.error || "Could not add to basket.");
+    return;
+  }
+
+  alert("Added to basket!");
+}
+</script>
+
+<body>
+    <div id="page-top"></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top text-uppercase navbar-light" id="mainNav" style="background: var(--bs-primary);--bs-secondary: #905A8B;--bs-secondary-rgb: 144,90,139;--bs-primary: #905A8B;--bs-primary-rgb: 144,90,139;margin-bottom: -3px;">
+        <div class="container"><a class="navbar-brand" href="#page-top" style="background: var(--bs-primary);">Flask E-commerce</a><button data-bs-toggle="collapse" data-bs-target="#navbarResponsive" class="navbar-toggler text-white bg-primary navbar-toggler-right text-uppercase rounded" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" style="background: var(--bs-primary);">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated and current_user.admin %}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('auth.logout') }}" style="background: var(--bs-primary);">Logout</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('views.basket_page') }}" style="background: var(--bs-primary);">Basket</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('views.product_management') }}" style="background: var(--bs-primary);">Product Management</a></li>
+                    {% elif current_user.is_authenticated %}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('auth.logout') }}" style="background: var(--bs-primary);">Logout</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('views.basket_page') }}" style="background: var(--bs-primary);">Basket</a></li>
+                    {% else %}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link text-bg-success shadow py-3 px-0 px-lg-3 rounded" href="{{ url_for('auth.sign_in') }}" style="background: var(--bs-primary);">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center text-white masthead" style="height: 100px;background: #a77fa4;margin-top: -94px;padding-bottom: 80px;margin-bottom: -79px;">
+        <h3 class="display-4" style="background: #a77fa4;text-align: left;width: 850px;"><a class="btn btn-success shadow" role="button" href="#offcanvas-menu" data-bs-target="#offcanvas-menu" data-bs-toggle="offcanvas" style="transform: translate(20px);">Menu</a>&nbsp; &nbsp; Sports &amp; Outdoors</h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alter-dismissable fade show" role="alert" style="background: var(--bs-danger);">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" style="color: var(--bs-danger);">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alter-dismissable fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <script>
+            document.querySelectorAll('.alert .close').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    this.parentElement.style.display = 'none';
+                });
+            });
+        </script>
+    </header>
+
+    <!-- Body Content -->
+    {% block content %}Body Content{% endblock %}
+
+    <!-- Footer -->
+    <footer class="text-center footer" style="background: var(--bs-primary);">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Location</h4>
+                    <p></p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase">Around the Web</h4>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="btn btn-outline-light text-center btn-social rounded-circle" role="button" href="#"><i class="fa fa-facebook fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light text-center btn-social rounded-circle" role="button" href="#"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light text-center btn-social rounded-circle" role="button" href="#"><i class="fa fa-twitter fa-fw"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-uppercase mb-4">About Flask - ecommerce</h4>
+                    <p class="lead mb-0"><span>Welcome to Flask - ecommerce! Where we pride ourselves on offering a curated section of high quality products to elevate your lifestyle.&nbsp;</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="d-lg-none scroll-to-top position-fixed rounded"><a class="text-center d-block rounded text-white" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
+    
+    <!-- Offcanvas Menu -->
+    <div class="offcanvas offcanvas-start bg-body" tabindex="-1" data-bs-backdrop="false" id="offcanvas-menu">
+        <div class="offcanvas-header"><a class="link-body-emphasis d-flex align-items-center me-md-auto mb-3 mb-md-0 text-decoration-none" href="/"><span class="fs-4">Sports &amp; Outdoors</span></a><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="offcanvas"></button></div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between pt-0">
+            <div>
+                <hr class="mt-0">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item"><a class="nav-link active link-light" href="{{ url_for('views.home') }}" aria-current="page" style="background: var(--bs-warning-border-subtle);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-house-door me-2">
+                                <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"></path>
+                            </svg> Home </a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="{{ url_for('views.football') }}"> Football</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="{{ url_for('views.running') }}"> Running</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="{{ url_for('views.basketball') }}">Basketball</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/freelancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/untitled.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/index.js') }}"></script>
+</body>
+</html>

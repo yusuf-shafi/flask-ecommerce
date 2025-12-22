@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="portfolio" style="margin-top: 66px; padding-top: 66px;">
+  <div class="container">
+
+    <!-- Special offers -->
+    <h2 class="text-center mb-4">Special Offers</h2>
+
+    <div class="row justify-content-center">
+      {% for item in special_offers %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#productModal{{ item.product.id }}">
+          <div class="card shadow-sm h-100">
+            <img
+              src="{{ item.url }}"
+              class="card-img-top"
+              alt="{{ item.product.product_name }}"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ item.product.product_name }}</h5>
+              <p class="mb-1">£{{ "%.2f"|format(item.product.price) }}</p>
+              <small class="text-muted">
+                Sizes: {{ item.product.sizes }}
+              </small>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Categories -->
+    <h2 class="text-center text-secondary mt-5 mb-4">Categories</h2>
+
+    <div class="row gy-4">
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('views.football') }}" class="text-decoration-none">
+          <div class="card shadow-sm">
+            <div
+              class="card-img-top"
+              style="
+                height: 220px;
+                background-image: url('{{ url_for('static', filename='img/categories/football.jpg') }}');
+                background-size: cover;
+                background-position: center;
+              "
+            ></div>
+            <div class="card-body text-center">
+              <h5 class="text-uppercase text-secondary mb-0">Football</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('views.basketball') }}" class="text-decoration-none">
+          <div class="card shadow-sm">
+            <div
+              class="card-img-top"
+              style="
+                height: 220px;
+                background-image: url('{{ url_for('static', filename='img/categories/basketball.jpg') }}');
+                background-size: cover;
+                background-position: center;
+              "
+            ></div>
+            <div class="card-body text-center">
+              <h5 class="text-uppercase text-secondary mb-0">Basketball</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('views.running') }}" class="text-decoration-none">
+          <div class="card shadow-sm">
+            <div
+              class="card-img-top"
+              style="
+                height: 220px;
+                background-image: url('{{ url_for('static', filename='img/categories/running.jpg') }}');
+                background-size: cover;
+                background-position: center;
+              "
+            ></div>
+            <div class="card-body text-center">
+              <h5 class="text-uppercase text-secondary mb-0">Running</h5>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Special offer modals -->
+{% for item in special_offers %}
+<div class="modal fade" id="productModal{{ item.product.id }}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">{{ item.product.product_name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <img
+            src="{{ item.url }}"
+            class="img-fluid"
+            style="max-height: 280px"
+            alt="{{ item.product.product_name }}"
+          />
+        </div>
+
+        <p><strong>Price:</strong> £{{ "%.2f"|format(item.product.price) }}</p>
+
+        <div class="mb-3">
+          <label class="form-label">Size</label>
+          <select id="size-{{ item.product.id }}" class="form-select">
+            {% for s in item.product.sizes.split(',') %}
+            <option value="{{ s.strip() }}">{{ s.strip() }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Quantity</label>
+          <input
+            id="qty-{{ item.product.id }}"
+            class="form-control"
+            type="number"
+            min="1"
+            value="1"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-success"
+          onclick="addToBasket({{ item.product.id }})"
+        >
+          Add to basket
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

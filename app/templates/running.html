@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Running{% endblock %}
+
+{% block content %}
+<section class="portfolio" style="margin-top: 66px; padding-top: 66px;">
+  <div class="container">
+
+    <h1 class="mb-4">Running Products</h1>
+
+    <div class="row">
+      {% for item in products_with_urls %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <a
+          href="#"
+          class="text-decoration-none"
+          data-bs-toggle="modal"
+          data-bs-target="#productModal{{ item.product.id }}"
+        >
+          <div class="card shadow-sm h-100">
+            <img src="{{ item.url }}" class="card-img-top" alt="{{ item.product.product_name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.product.product_name }}</h5>
+              <p class="mb-1">£{{ "%.2f"|format(item.product.price) }}</p>
+              <small class="text-muted">Sizes: {{ item.product.sizes }}</small>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% for item in products_with_urls %}
+    <div class="modal fade" id="productModal{{ item.product.id }}" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">{{ item.product.product_name }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Size</label>
+              <select class="form-select" id="size-{{ item.product.id }}">
+                {% for s in item.product.sizes.split(',') %}
+                <option value="{{ s.strip() }}">{{ s.strip() }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Quantity</label>
+              <input
+                id="qty-{{ item.product.id }}"
+                type="number"
+                min="1"
+                value="1"
+                class="form-control"
+              >
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="addToBasket({{ item.product.id }})"
+            >
+              Add to basket
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+{% endblock %}
