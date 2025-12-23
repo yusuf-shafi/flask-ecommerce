@@ -1,3 +1,5 @@
+![CI](https://github.com/yusuf-shafi/flask-ecommerce/actions/workflows/ci.yml/badge.svg)
+
 # Flask E-commerce Application
 
 A simple e-commerce web application built with Flask.  
@@ -21,26 +23,31 @@ This project demonstrates backend-focused web development, including authenticat
 ## Project Structure
 flask-ecommerce/
 ├── app/
-│ ├── init.py # App factory and configuration
-│ ├── auth.py # Authentication routes
-│ ├── views.py # Main application routes
-│ ├── models.py # Database models
-│
-├── templates/ # Jinja2 templates
-│ ├── base.html
-│ ├── index.html
-│ ├── football.html
-│ ├── basketball.html
-│ ├── running.html
-│ ├── basket.html
-│ ├── product_management.html
-│ ├── sign_in.html
-│ └── sign_up.html
-│
-├── static/
-│ ├── assets/ # CSS, JS, fonts
-│ └── img/ # Product and category images
-│
-├── run.py # Application entry point
-├── requirements.txt # Python dependencies
+│   ├── __init__.py
+│   ├── auth.py
+│   ├── views.py
+│   ├── models.py
+│   ├── templates/
+│   └── static/
+├── tests/
+├── requirements.txt
+├── run.py
 └── README.md
+
+## Run locally
+
+### 1) Create and activate a virtual environment
+```bash
+python -m venv .venv
+# Windows:
+.\.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+### 2) Install dependecies
+pip install -r requirements.txt
+
+### 3) Set environment variables
+$env:SECRET_KEY="dev-secret"
+$env:ADMIN_SIGNUP_KEY="admin-key"
+
