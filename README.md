@@ -21,6 +21,9 @@ This project demonstrates backend-focused web development, including authenticat
 - Bootstrap 5
 
 ## Project Structure
+## Project Structure
+
+```text
 flask-ecommerce/
 ├── app/
 │   ├── __init__.py
@@ -30,9 +33,12 @@ flask-ecommerce/
 │   ├── templates/
 │   └── static/
 ├── tests/
+├── .env.example
+├── pyproject.toml
 ├── requirements.txt
 ├── run.py
 └── README.md
+
 
 ## Run locally
 
