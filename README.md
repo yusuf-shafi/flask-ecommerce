@@ -44,10 +44,10 @@ python -m venv .venv
 # macOS/Linux:
 source .venv/bin/activate
 
-### 2) Install dependecies
+2) Install dependecies
 pip install -r requirements.txt
 
-### 3) Set environment variables
+3) Set environment variables
 $env:SECRET_KEY="dev-secret"
 $env:ADMIN_SIGNUP_KEY="admin-key"
 
